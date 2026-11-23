@@ -1,0 +1,512 @@
+{
+	"info": {
+		"_postman_id": "c2de70d3-b5ec-4c4f-89d4-44fdeb4fc7aa",
+		"name": "Restful Booker - API Testing Portfolio",
+		"description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "60235749",
+		"_collection_link": "https://karen0101sousa-7917423.postman.co/workspace/a12f3984-d2d8-486d-8e4c-c201949333d3/collection/60235749-c2de70d3-b5ec-4c4f-89d4-44fdeb4fc7aa?action=share&source=collection_link&creator=60235749"
+	},
+	"item": [
+		{
+			"name": "01 - Booking",
+			"item": [
+				{
+					"name": "Listar reservas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Deve retornar status 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Deve retornar conteúdo em JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Deve retornar uma lista de reservas\", function () {",
+									"    const response = pm.response.json();",
+									"",
+									"    pm.expect(response).to.be.an(\"array\");",
+									"});",
+									"",
+									"pm.test(\"Cada reserva deve possuir bookingid numérico\", function () {",
+									"    const response = pm.response.json();",
+									"",
+									"    response.forEach(function (booking) {",
+									"        pm.expect(booking).to.have.property(\"bookingid\");",
+									"        pm.expect(booking.bookingid).to.be.a(\"number\");",
+									"    });",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": "Solicita resposta no formato JSON"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/booking",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking"
+							]
+						},
+						"description": "### Objetivo\n\nVerificar se a API Restful Booker permite consultar a lista de identificadores das reservas cadastradas.\n\n### Método e endpoint\n\n- **Método:** GET\n    \n- **Endpoint:** `/booking`\n    \n- **URL:** `{{baseUrl}}/booking`\n    \n\n### Pré-condições\n\n- API disponível para acesso.\n    \n- Variável `baseUrl` configurada na Collection.\n    \n\n### Cabeçalhos\n\n| Key | Value | Finalidade |\n| --- | --- | --- |\n| Accept | application/json | Indica que o cliente aceita receber uma resposta em JSON. |\n\n### Parâmetros\n\nNão são necessários parâmetros de caminho ou query parameters.\n\n### Corpo da requisição\n\nNão possui corpo (Body), pois se trata de uma requisição GET.\n\n### Resultado esperado\n\n- Retornar o status HTTP `200 OK`.\n    \n- Apresentar uma lista de reservas no corpo da resposta.\n    \n- Cada elemento da lista deve conter o campo `bookingid`.\n    \n- O campo `bookingid` deve apresentar um identificador numérico.\n    \n\n### Resultado observado\n\n- Status HTTP: `200 OK`.\n    \n- Content-Type: `application/json; charset=utf-8`.\n    \n- Corpo da resposta: lista de objetos contendo o campo `bookingid`.\n    \n\n### Observações\n\nO endpoint retorna os identificadores das reservas, e não os detalhes completos de cada reserva. A quantidade de reservas pode variar, pois a API é compartilhada e seus dados podem ser alterados."
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar reserva existente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"const response = pm.response.json();",
+									"",
+									"pm.test(\"Deve retornar status 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Deve retornar conteúdo em JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Deve conter todos os campos esperados\", function () {",
+									"    pm.expect(response).to.have.property(\"firstname\");",
+									"    pm.expect(response).to.have.property(\"lastname\");",
+									"    pm.expect(response).to.have.property(\"totalprice\");",
+									"    pm.expect(response).to.have.property(\"depositpaid\");",
+									"    pm.expect(response).to.have.property(\"bookingdates\");",
+									"    pm.expect(response).to.have.property(\"additionalneeds\");",
+									"});",
+									"",
+									"pm.test(\"Deve apresentar os tipos de dados corretos\", function () {",
+									"    pm.expect(response.firstname).to.be.a(\"string\");",
+									"    pm.expect(response.lastname).to.be.a(\"string\");",
+									"    pm.expect(response.totalprice).to.be.a(\"number\");",
+									"    pm.expect(response.depositpaid).to.be.a(\"boolean\");",
+									"    pm.expect(response.bookingdates).to.be.an(\"object\");",
+									"    pm.expect(response.additionalneeds).to.be.a(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Deve conter as datas de check-in e check-out\", function () {",
+									"    pm.expect(response.bookingdates).to.have.property(\"checkin\");",
+									"    pm.expect(response.bookingdates).to.have.property(\"checkout\");",
+									"",
+									"    pm.expect(response.bookingdates.checkin).to.be.a(\"string\");",
+									"    pm.expect(response.bookingdates.checkout).to.be.a(\"string\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/booking/2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking",
+								"2"
+							]
+						},
+						"description": "### Objetivo\n\nVerificar se a API Restful Booker permite consultar os detalhes de uma reserva específica por meio de seu identificador.\n\n### Método e endpoint\n\n- **Método:** GET\n    \n- **Endpoint:** `/booking/{id}`\n    \n- **URL:** `{{baseUrl}}/booking/1`\n    \n\n### Pré-condições\n\n- API disponível para acesso.\n    \n- Variável `baseUrl` configurada na Collection.\n    \n- Existência de uma reserva correspondente ao identificador informado.\n    \n\n### Parâmetros\n\n- **Path parameter:** `id`\n    \n- **Valor utilizado:** `1`\n    \n- **Tipo documentado:** String\n    \n\n### Cabeçalhos\n\n| Key | Value | Finalidade |\n| --- | --- | --- |\n| Accept | application/json | Indica que o cliente aceita receber uma resposta em JSON. |\n\n### Corpo da requisição\n\nNão possui corpo (Body).\n\n### Resultado esperado\n\n- HTTP Status: `200 OK`.\n    \n- Retornar os detalhes da reserva em formato JSON.\n    \n- Apresentar os seguintes campos:\n    \n    - `firstname`\n        \n    - `lastname`\n        \n    - `totalprice`\n        \n    - `depositpaid`\n        \n    - `bookingdates`\n        \n    - `additionalneeds`\n        \n- Os campos devem apresentar os tipos de dados esperados:\n    \n    - String: `firstname`, `lastname`, `additionalneeds`.\n        \n    - Number: `totalprice`.\n        \n    - Boolean: `depositpaid`.\n        \n    - Object: `bookingdates`.\n        \n- O objeto `bookingdates` deve conter `checkin` e `checkout`, ambos como String.\n    \n\n### Resultado observado\n\n- HTTP Status: `200 OK`.\n    \n- Content-Type: `application/json`.\n    \n- Resposta contendo os detalhes da reserva.\n    \n- Campos e tipos de dados compatíveis com a estrutura esperada.\n    \n\n### Observações\n\nA validação considera a estrutura e os tipos de dados retornados, sem exigir valores fixos para os campos, pois os registros da API compartilhada podem sofrer alterações."
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar reserva inexistente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"\npm.test(\"Deve retornar status 404\", function () {\n    pm.response.to.have.status(404);\n});\n\npm.test(\"Deve retornar mensagem Not Found\", function () {\n    pm.expect(pm.response.text()).to.eql(\"Not Found\");\n});\n"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/booking/514603332",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking",
+								"514603332"
+							]
+						},
+						"description": "### Objetivo\n\nVerificar como a API Restful Booker se comporta quando é solicitada a consulta de uma reserva que não existe.\n\n### Método e endpoint\n\n- **Método:** GET\n    \n- **Endpoint:** `/booking/{id}`\n    \n- **URL:** `{{baseUrl}}/booking/5146`\n    \n\n### Pré-condições\n\n- API disponível para acesso.\n    \n- Variável `baseUrl` configurada na Collection.\n    \n- Utilização de um identificador sem reserva correspondente no momento da execução.\n    \n\n### Parâmetros\n\n- **Path parameter:** `id`\n    \n- **Valor utilizado:** `5146`\n    \n- **Tipo:** String\n    \n\n### Cabeçalhos\n\n| Key | Value | Finalidade |\n| --- | --- | --- |\n| Accept | application/json | Indica que o cliente aceita receber uma resposta em JSON. |\n\n### Corpo da requisição\n\nNão possui corpo (Body).\n\n### Resultado esperado\n\n- HTTP Status: `404 Not Found`.\n    \n- Não retornar os detalhes de uma reserva.\n    \n- Apresentar a mensagem `Not Found` no corpo da resposta.\n    \n\n### Resultado observado\n\n- HTTP Status: `404 Not Found`.\n    \n- Corpo da resposta: `Not Found`.\n    \n\n### Testes automatizados\n\n- Validar o status HTTP 404.\n    \n- Validar a mensagem `Not Found` no corpo da resposta.\n    \n\n### Observações\n\nO identificador utilizado foi observado como inexistente durante a execução. Como a API é compartilhada e mutável, sua inexistência deve ser confirmada novamente em futuras execuções."
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar com ID alfanumérico",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Deve retornar status 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Deve retornar mensagem Not Found\", function () {",
+									"    pm.expect(pm.response.text()).to.eql(\"Not Found\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/booking/abc",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking",
+								"abc"
+							]
+						},
+						"description": "### Objetivo\n\nInvestigar o comportamento da API Restful Booker ao receber um identificador alfanumérico na consulta de uma reserva.\n\n### Método e endpoint\n\n- **Método:** GET\n    \n- **Endpoint:** `/booking/{id}`\n    \n- **URL:** `{{baseUrl}}/booking/abc`\n    \n\n### Pré-condições\n\n- API disponível para acesso.\n    \n- Variável `baseUrl` configurada na Collection.\n    \n\n### Parâmetros\n\n- **Path parameter:** `id`\n    \n- **Valor utilizado:** `abc`\n    \n- **Tipo:** String\n    \n\n### Cabeçalhos\n\n| Key | Value | Finalidade |\n| --- | --- | --- |\n| Accept | application/json | Indica que o cliente aceita receber uma resposta em JSON. |\n\n### Corpo da requisição\n\nNão possui corpo (Body).\n\n### Resultado esperado\n\nA documentação define o parâmetro `id` como String, mas não especifica uma regra de validação que restrinja seu conteúdo exclusivamente a números.\n\nPortanto, o comportamento para um identificador alfanumérico deve ser investigado, sem presumir antecipadamente um status HTTP específico.\n\n### Resultado observado\n\n- HTTP Status: `404 Not Found`.\n    \n- Corpo da resposta: `Not Found`.\n    \n\n### Testes automatizados\n\n- Validar o status HTTP 404.\n    \n- Validar a mensagem `Not Found` no corpo da resposta.\n    \n\n### Observações\n\nO resultado observado não constitui, isoladamente, evidência de defeito. A documentação não especifica o comportamento esperado para identificadores alfanuméricos."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "02 - Validações e testes negativos",
+			"item": [
+				{
+					"name": "Criar reserva com dados válidos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"const response = pm.response.json();",
+									"",
+									"// Teste 1: validar status HTTP",
+									"pm.test(\"Deve retornar status 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Teste 2: validar formato JSON",
+									"pm.test(\"Deve retornar conteúdo em JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"// Teste 3: validar identificador",
+									"pm.test(\"Deve retornar bookingid numérico\", function () {",
+									"    pm.expect(response.bookingid).to.be.a(\"number\");",
+									"});",
+									"",
+									"// Teste 4: validar objeto booking",
+									"pm.test(\"Deve retornar o objeto booking\", function () {",
+									"    pm.expect(response).to.have.property(\"booking\");",
+									"    pm.expect(response.booking).to.be.an(\"object\");",
+									"});",
+									"",
+									"// Teste 5: validar dados cadastrados",
+									"pm.test(\"Deve retornar os dados enviados\", function () {",
+									"    pm.expect(response.booking.firstname).to.eql(\"Ana\");",
+									"    pm.expect(response.booking.lastname).to.eql(\"Silva\");",
+									"    pm.expect(response.booking.totalprice).to.eql(250);",
+									"    pm.expect(response.booking.depositpaid).to.eql(true);",
+									"});",
+									"",
+									"// Teste 6: validar datas",
+									"pm.test(\"Deve retornar as datas informadas\", function () {",
+									"    pm.expect(response.booking.bookingdates.checkin)",
+									"        .to.eql(\"2027-01-10\");",
+									"",
+									"    pm.expect(response.booking.bookingdates.checkout)",
+									"        .to.eql(\"2027-01-15\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstname\": \"Ana\",\n    \"lastname\": \"Silva\",\n    \"totalprice\": 250,\n    \"depositpaid\": true,\n    \"bookingdates\": {\n        \"checkin\": \"2027-01-10\",\n        \"checkout\": \"2027-01-15\"\n    },\n    \"additionalneeds\": \"Breakfast\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/booking",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar reserva sem firstname",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Deve rejeitar reserva sem firstname\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"lastname\": \"Silva\",\n    \"totalprice\": 250,\n    \"depositpaid\": true,\n    \"bookingdates\": {\n        \"checkin\": \"2027-01-10\",\n        \"checkout\": \"2027-01-15\"\n    },\n    \"additionalneeds\": \"Breakfast\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/booking",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking"
+							]
+						},
+						"description": "### Cenário: criação de reserva sem o campo firstname\n\n**Requisição:** POST `/booking`\n\n**Objetivo:** verificar o comportamento da API ao receber uma solicitação de criação de reserva sem o campo obrigatório `firstname`.\n\n**Resultado esperado:** a API deve rejeitar a requisição com um status HTTP 400 (Bad Request), apresentando uma mensagem clara sobre a ausência do campo obrigatório.\n\n**Resultado observado:**\n\n- Status HTTP: 500 (Internal Server Error).\n    \n- Body: `Internal Server Error`.\n    \n\n**Análise:** a API retornou um erro interno ao receber uma requisição sem um campo obrigatório. Embora a criação não tenha sido concluída com sucesso, o retorno 500 não oferece uma indicação clara de que o problema está nos dados enviados pelo cliente.\n\n**Conclusão:** comportamento inesperado. Recomenda-se uma validação de entrada adequada, com retorno HTTP 400 e mensagem informativa para o consumidor da API.\n\n**Observação:** resultado observado nesta execução da API pública Restful Booker. A confirmação de um defeito requer considerar o contrato documentado e a possibilidade de variação do ambiente."
+					},
+					"response": []
+				},
+				{
+					"name": "Criar reserva com totalprice inválido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Deve rejeitar totalprice com tipo inválido\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstname\": \"Ana\",\n    \"lastname\": \"Silva\",\n    \"totalprice\": \"hundred\",\n    \"depositpaid\": true,\n    \"bookingdates\": {\n        \"checkin\": \"2027-01-10\",\n        \"checkout\": \"2027-01-15\"\n    },\n    \"additionalneeds\": \"Breakfast\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/booking",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking"
+							]
+						},
+						"description": "### Cenário: criar reserva com totalprice inválido\n\n**Requisição:** POST `/booking`\n\n**Objetivo:** verificar se a API valida o tipo de dado informado no campo `totalprice`, que deve receber um valor numérico.\n\n**Dados utilizados:** campo `totalprice` enviado como texto (`\"duzentos\"`), mantendo os demais campos válidos.\n\n**Resultado esperado:** a API deve rejeitar a requisição com HTTP 400 (Bad Request), informando que o campo `totalprice` deve receber um valor numérico.\n\n**Resultado observado:**\n\n- A API permitiu a criação da reserva.\n    \n- O campo `bookingid` foi retornado.\n    \n- O campo `totalprice` retornou como `null`.\n    \n\n**Análise:** a API não rejeitou o valor de tipo inválido. O dado enviado como texto não foi preservado como valor numérico e resultou em `null` na resposta.\n\n**Conclusão:** comportamento inesperado. Recomenda-se validar o tipo de dado recebido e rejeitar valores incompatíveis antes de processar a criação da reserva.\n\n**Observação:** resultado observado durante a execução na API pública Restful Booker."
+					},
+					"response": []
+				},
+				{
+					"name": "Criar reserva sem bookingdates",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Deve rejeitar reserva sem bookingdates\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstname\": \"Ana\",\n    \"lastname\": \"Silva\",\n    \"totalprice\": 250,\n    \"depositpaid\": true,\n    \"additionalneeds\": \"Breakfast\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/booking",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking"
+							]
+						},
+						"description": "### Cenário: criar reserva sem bookingdates\n\n**Requisição:** POST `/booking`\n\n**Objetivo:** verificar se a API rejeita a criação de uma reserva quando o objeto obrigatório `bookingdates` não é informado.\n\n**Resultado esperado:** HTTP 400 (Bad Request), com mensagem indicando a ausência do objeto obrigatório.\n\n**Resultado observado:**\n\n- Status HTTP: 500 (Internal Server Error).\n    \n- Body: `Internal Server Error`.\n    \n\n**Análise:** a API retornou um erro interno ao receber uma requisição sem o objeto `bookingdates`. O comportamento indica ausência de tratamento adequado para essa entrada incompleta.\n\n**Conclusão:** comportamento inesperado. Recomenda-se implementar validação dos campos obrigatórios e retornar uma resposta de erro controlada e informativa.\n\n**Observação:** resultado observado durante a execução na API pública Restful Booker."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Variable",
+			"value": ""
+		},
+		{
+			"key": "Initial Value",
+			"value": ""
+		},
+		{
+			"key": "Current Value",
+			"value": ""
+		}
+	]
+}

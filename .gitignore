@@ -1,0 +1,15 @@
+# Environment variables
+.env
+.env.*
+
+# Credentials and sensitive data
+*.secret
+*.credentials
+
+# Operating system
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
